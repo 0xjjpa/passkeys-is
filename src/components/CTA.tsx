@@ -13,15 +13,14 @@ export const CTA = () => (
   >
     <Button
       as={ChakraLink}
-      isExternal
-      href="https://chakra-ui.com"
+      href="/about"
       variant="outline"
       rounded="button"
       flexGrow={1}
       mx={2}
       width="full"
     >
-      chakra-ui
+      About Passkeys
     </Button>
     <Button
       as={ChakraLink}
@@ -33,7 +32,7 @@ export const CTA = () => (
       mx={2}
       width="full"
     >
-      View Repo
+      Passkeys & Crypto
     </Button>
   </Container>
 )
