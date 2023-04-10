@@ -1,4 +1,6 @@
 import { Link as ChakraLink, Button } from '@chakra-ui/react'
+import { NavButton } from './NavButton'
+
 
 import { Container } from './Container'
 
@@ -11,7 +13,7 @@ export const CTA = () => (
     maxWidth="3xl"
     py={3}
   >
-    <Button
+    <NavButton
       as={ChakraLink}
       href="/about"
       variant="outline"
@@ -21,8 +23,8 @@ export const CTA = () => (
       width="full"
     >
       About Passkeys
-    </Button>
-    <Button
+    </NavButton>
+    <NavButton
       as={ChakraLink}
       isExternal
       href="https://github.com/vercel/next.js/blob/canary/examples/with-chakra-ui-typescript"
@@ -33,6 +35,6 @@ export const CTA = () => (
       width="full"
     >
       Passkeys & Crypto
-    </Button>
+    </NavButton>
   </Container>
 )

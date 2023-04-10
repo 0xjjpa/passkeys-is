@@ -5,31 +5,29 @@ import {
   Container,
   Heading,
   Text,
-  useBreakpointValue,
 } from '@chakra-ui/react';
 import { InfoIcon } from "@chakra-ui/icons";
+import {ABOUT_PASSKEYS } from "../constants/about-passkeys";
 
 const About = () => {
-  const columns = useBreakpointValue({ base: 1, sm: 1, md: 2 });
-
   return (
     <Container maxW="container.xl" py={12}>
       <Heading as="h2" size="lg" mb={6} textAlign="center">
-        About Us
+        About Passkeys
       </Heading>
-      <SimpleGrid columns={columns} spacing={10}>
+      <SimpleGrid columns={[1,1,2,2]} spacing={10}>
         <Box
           p={6}
           borderRadius="md"
           boxShadow="md"
           textAlign="center"
         >
-          <InfoIcon />
+          <Text>🔑</Text>
           <Text fontWeight="bold" mt={4}>
-            Our Team
+            Introduction to Apple Passkeys and WebAuthn
           </Text>
           <Text mt={2}>
-            Meet the amazing team behind our success.
+            {ABOUT_PASSKEYS[0]}
           </Text>
         </Box>
         <Box
