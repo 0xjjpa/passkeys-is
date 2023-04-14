@@ -1,5 +1,5 @@
 import {
-  Link as ChakraLink,
+  Box,
   Text,
   Flex,
 } from "@chakra-ui/react";
@@ -17,14 +17,17 @@ const Index = () => (
       <MainHeading />
     </Flex>
     <Main>
-    <CTA />  
+      <Box mb="5">
+        <Text mx="5" textAlign="center">An introduction to everything Passkeys from a developer perspective.</Text>
+      </Box>
+      <CTA />
     </Main>
 
     <DarkModeSwitch />
     <Footer>
       <Text fontFamily="mono">By 0xjjpa.</Text>
     </Footer>
-    
+
   </Container>
 );
 
