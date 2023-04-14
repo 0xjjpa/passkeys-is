@@ -5,74 +5,36 @@ import {
   Container,
   Heading,
   Text,
+  Flex,
 } from '@chakra-ui/react';
-import { InfoIcon } from "@chakra-ui/icons";
-import {ABOUT_PASSKEYS } from "../constants/about-passkeys";
+import { ABOUT_PASSKEYS } from "../constants/about-passkeys";
+import { Main } from '../components/Main';
+import { DarkModeSwitch } from '../components/DarkModeSwitch';
+import { Footer } from '../components/Footer';
 
 const About = () => {
   return (
-    <Container maxW="container.xl" py={12}>
-      <Heading as="h2" size="lg" mb={6} textAlign="center">
-        About Passkeys
-      </Heading>
-      <SimpleGrid columns={[1,1,2,2]} spacing={10}>
+    <Container height="100vh">
+      <Flex justifyContent="center" alignItems="center" height="100vh">
+        <Heading as="h2" size="lg" mb={6} textAlign="center">
+          About Passkeys_
+        </Heading>
+      </Flex>
+      <Main>
         <Box
-          p={6}
-          borderRadius="md"
-          boxShadow="md"
-          textAlign="center"
+          p={2}
+          textAlign="left"
         >
-          <Text>🔑</Text>
-          <Text fontWeight="bold" mt={4}>
-            Introduction to Apple Passkeys and WebAuthn
-          </Text>
           <Text mt={2}>
-            {ABOUT_PASSKEYS[0]}
+            🔑 {ABOUT_PASSKEYS[0]}
           </Text>
         </Box>
-        <Box
-          p={6}
-          borderRadius="md"
-          boxShadow="md"
-          textAlign="center"
-        >
-          <InfoIcon />
-          <Text fontWeight="bold" mt={4}>
-            Our Technology
-          </Text>
-          <Text mt={2}>
-            Learn about the cutting-edge technology we use.
-          </Text>
-        </Box>
-        <Box
-          p={6}
-          borderRadius="md"
-          boxShadow="md"
-          textAlign="center"
-        >
-          <InfoIcon />
-          <Text fontWeight="bold" mt={4}>
-            Mobile Development
-          </Text>
-          <Text mt={2}>
-            Discover our expertise in mobile app development.
-          </Text>
-        </Box>
-        <Box
-          p={6}
-          borderRadius="md"
-          boxShadow="md"
-          textAlign="center"
-        >
-          <InfoIcon />
-          <Text fontWeight="bold" mt={4}>
-            Tools & Resources
-          </Text>
-          <Text mt={2}>
-            Explore the tools and resources we use for our projects.
-          </Text>
-        </Box>
-      </SimpleGrid>
+      </Main>
+
+      <DarkModeSwitch />
+      <Footer>
+        <Text fontFamily="mono">By 0xjjpa.</Text>
+      </Footer>
     </Container>
   );
 };

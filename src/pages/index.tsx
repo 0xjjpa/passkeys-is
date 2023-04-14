@@ -2,6 +2,7 @@ import {
   Box,
   Text,
   Flex,
+  Link,
 } from "@chakra-ui/react";
 
 import { Container } from "../components/Container";
@@ -25,7 +26,7 @@ const Index = () => (
 
     <DarkModeSwitch />
     <Footer>
-      <Text fontFamily="mono">By 0xjjpa.</Text>
+      <Text fontFamily="mono">By <Link isExternal href='https://twitter.com/0xjjpa'>0xjjpa</Link>.</Text>
     </Footer>
 
   </Container>
