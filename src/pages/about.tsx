@@ -7,6 +7,7 @@ import {
   Text,
   Flex,
 } from '@chakra-ui/react';
+import NextLink from 'next/link';
 import { ABOUT_PASSKEYS } from "../constants/about-passkeys";
 import { Main } from '../components/Main';
 import { DarkModeSwitch } from '../components/DarkModeSwitch';
@@ -28,8 +29,13 @@ const About = () => {
           <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
             🔑 {ABOUT_PASSKEYS[0]}
           </Text>
+          <br />
+          <Text fontFamily={'Merriweather'}>
+            <NextLink href='/'>Back Home_</NextLink>
+          </Text>
         </Box>
       </Main>
+
 
       <DarkModeSwitch />
       <Footer>
