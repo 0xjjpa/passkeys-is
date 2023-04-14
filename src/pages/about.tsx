@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Box,
-  SimpleGrid,
+  Link,
   Container,
   Heading,
   Text,
@@ -25,7 +25,7 @@ const About = () => {
           p={2}
           textAlign="left"
         >
-          <Text mt={2}>
+          <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
             🔑 {ABOUT_PASSKEYS[0]}
           </Text>
         </Box>
@@ -33,7 +33,7 @@ const About = () => {
 
       <DarkModeSwitch />
       <Footer>
-        <Text fontFamily="mono">By 0xjjpa.</Text>
+        <Text fontFamily="mono">By <Link isExternal href='https://twitter.com/0xjjpa'>0xjjpa</Link>.</Text>
       </Footer>
     </Container>
   );
