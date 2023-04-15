@@ -5,7 +5,7 @@ import { Button } from '@chakra-ui/react';
 export const NavButton = ({ href, children, ...props }) => {
   return (
     <NextLink href={href} passHref>
-      <Button {...props}>
+      <Button {...props} mx="auto">
         {children}
       </Button>
     </NextLink>
