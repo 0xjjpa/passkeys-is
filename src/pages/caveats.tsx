@@ -14,6 +14,7 @@ import { PasskeyCode } from '../components/PasskeyCode';
 import { CiLock } from 'react-icons/ci';
 import { PasskeyManager } from '../components/PasskeyManager';
 import { PasskeyFooter } from '../components/PasskeyFooter';
+import { PASSKEYS_CAVEATS } from '../constants/passkeysCaveats';
 
 const Caveats = () => {
   return (
@@ -28,14 +29,20 @@ const Caveats = () => {
           p={2}
           textAlign="left"
         >
-          <Heading as="h3" size="sm" mb={6} textAlign="center">
-            Secure context
-          </Heading>
-          <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
-            <Icon as={CiLock} mr="2" />
-            As with many cryptographic related applications, Passkeys will not be available in insecure contexts. This means that Passkeys will not be available in <PasskeyCode>HTTP</PasskeyCode> contexts, but will be available in <PasskeyCode>HTTPS</PasskeyCode> contexts. This includes <PasskeyCode>localhost</PasskeyCode>, which is not considered a secure context.
-          </Text>
-          <br />
+          {
+            PASSKEYS_CAVEATS.map((caveat) => (
+              <React.Fragment key={caveat.heading}>
+                <Heading as="h3" size="sm" mb={6} textAlign="center">
+                  {caveat.heading}
+                </Heading>
+                <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
+                  <Icon as={caveat.icon} mr="2" />
+                  {caveat.content}
+                </Text>
+                <br />
+              </React.Fragment>
+            ))
+          }
           <Text fontFamily={'Merriweather'}>
             <NextLink href='/'>Back Home_</NextLink>
           </Text>

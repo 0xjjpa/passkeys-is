@@ -1,3 +1,5 @@
+import { logger } from "./logger";
+
 export class Passkey {
   static _createdCredential: PublicKeyCredential;
 
@@ -24,10 +26,16 @@ export class Passkey {
   };
 
   static async create({ appName, username }: { appName: string, username: string }) {
-    const credential = (await navigator.credentials.create({
-      publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username),
-    })) as PublicKeyCredential;
-
-    this._createdCredential = credential;
+    logger.debug('Creating credential');
+    try {
+      const credential = (await navigator.credentials.create({
+        publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username),
+      })) as PublicKeyCredential;
+  
+      this._createdCredential = credential;
+    } catch (e) {
+      console.error('Error while creating the credential', e);
+    }
+    
   }
 }
