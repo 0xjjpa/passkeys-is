@@ -13,9 +13,10 @@ export const PasskeyManager = () => {
       icon={<AddIcon />}
       aria-label="Load Passkey"
       onClick={async () => {
-        const { data, error } = await Passkey.create({
+        const { error } = await Passkey.create({
           appName: 'Passkey',
-          username: 'Demo Username'
+          username: 'Demo Username',
+          email: 'test@demo.com'
         });
         if (error) {
           toast({

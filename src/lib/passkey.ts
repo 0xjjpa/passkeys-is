@@ -9,7 +9,7 @@ export type PasskeyCreationResponse = {
 export class Passkey {
   static _createdCredential: PublicKeyCredential;
 
-  static publicKeyCredentialCreationOptions(appName: string, username: string): PublicKeyCredentialCreationOptions {
+  static publicKeyCredentialCreationOptions(appName: string, username: string, email?: string): PublicKeyCredentialCreationOptions {
     return {
       challenge: new Uint8Array(16),
       rp: {
@@ -17,7 +17,7 @@ export class Passkey {
       },
       user: {
         id: new Uint8Array(16),
-        name: username,
+        name: email ? email : username,
         displayName: username,
       },
       pubKeyCredParams: [
@@ -31,11 +31,15 @@ export class Passkey {
     }
   };
 
-  static async create({ appName, username }: { appName: string, username: string }): Promise<PasskeyCreationResponse> {
+  static async create({ appName, username, email }: { appName: string, username: string, email?: string }): Promise<PasskeyCreationResponse> {
     logger.debug('Creating credential');
     try {
+      if (!navigator.credentials) {
+        return { data: null, error: PASSKEY_ERRORS.BROWSER_DOES_NOT_SUPPORT_PASSKEY }
+      }
+
       const credential = (await navigator.credentials.create({
-        publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username),
+        publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username, email),
       })) as PublicKeyCredential;
   
       this._createdCredential = credential;
