@@ -3,6 +3,7 @@ import {
   Text,
   Flex,
   Link,
+  Code,
 } from "@chakra-ui/react";
 
 import { Container } from "../components/Container";
@@ -19,7 +20,12 @@ const Index = () => (
     </Flex>
     <Main>
       <Box mb="5">
-        <Text mx="5" textAlign="center">An introduction to everything Passkeys from a developer perspective.</Text>
+        <Text mx="5" textAlign="center" mb="2">
+          An introduction to everything Passkeys from a <Code px="1">developer</Code> perspective.
+        </Text>
+        <Text mx="5" textAlign="center" fontSize="xs">
+          For a more generic introduction, we recommend <Link isExternal href='https://passkeys.io'>Passkeys.io</Link>
+        </Text>
       </Box>
       <CTA />
     </Main>

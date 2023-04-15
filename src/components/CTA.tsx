@@ -6,7 +6,7 @@ import { CiCircleInfo, CiMoneyBill, CiBoxList, CiFlag1 } from 'react-icons/ci'
 export const CTA = () => (
   <SimpleGrid columns={[1, 2, 2, 2]} spacing={2} mt={8}>
     <NavButton
-      href="/about"
+      href="/introduction"
       variant="ghost"
       rounded="button"
       flexGrow={1}
@@ -14,7 +14,7 @@ export const CTA = () => (
       width="full"
     >
 
-      <Icon as={CiCircleInfo} mr="2" /><Text>About Passkeys</Text>
+      <Icon as={CiCircleInfo} mr="2" /><Text>Introduction to Passkeys</Text>
     </NavButton>
     <NavButton
       disabled

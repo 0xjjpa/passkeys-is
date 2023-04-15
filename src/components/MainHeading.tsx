@@ -32,12 +32,10 @@ const FadeInHeader = ({ currentPhrase }: { currentPhrase: string }) => {
 const MainHeading = () => {
   const phrases = [
     "a FIDO multi-device credential.",
-    "a new onboarding user flow.",
-    "a password replacement.",
-    "a webauthn authenticator.",
-    "a secure way to sign in.",
-    "the future of authentication.",
-    "a P256-based secret key."
+    "a password-less onboarding flow.",
+    "a webauthn platform authenticator.",
+    "an HSM-level secure credential.",
+    "a P256-based keypair generator."
   ];
 
   const [currentPhrase, setCurrentPhrase] = useState(phrases[0]);
@@ -57,7 +55,7 @@ const MainHeading = () => {
   return (
     <Box textAlign="center" px="2">
       <Heading as="h1" size="lg" mb={2} style={{ textShadow: "1px 1px 1px #aaa" }}>
-        Passkeys is
+        Passkeys.is
       </Heading>
       <Flex>
         <FadeInHeader currentPhrase={currentPhrase} />
