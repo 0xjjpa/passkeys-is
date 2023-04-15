@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dev:lastUpdated": "node -e 'console.log(`export const LAST_UPDATED = ${new Date().getTime()}`)' > src/constants/lastUpdated.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",

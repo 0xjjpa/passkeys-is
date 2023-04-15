@@ -42,17 +42,15 @@ export const CTA = () => (
       <Icon as={CiBoxList} mr="2" /><Text>Managing Passkeys (WIP)</Text>
     </NavButton>
     <NavButton
-      disabled
-      opacity={0.5}
-      href="/#"
-      variant="solid"
+      href="/caveats"
+      variant="ghost"
       rounded="button"
       flexGrow={1}
       mx={2}
       width="full"
     >
 
-      <Icon as={CiFlag1} mr="2" /><Text>Passkeys' Caveats (WIP)</Text>
+      <Icon as={CiFlag1} mr="2" /><Text>Passkeys' Caveats</Text>
     </NavButton>
   </SimpleGrid>
 )
