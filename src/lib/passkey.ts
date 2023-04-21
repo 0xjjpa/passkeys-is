@@ -6,6 +6,11 @@ export type PasskeyCreationResponse = {
   error: string | null;
 }
 
+export type PasskeyRawIdResponse = {
+  data: string | null;
+  error: string | null;
+}
+
 export class Passkey {
   static _createdCredential: PublicKeyCredential;
 
@@ -31,6 +36,20 @@ export class Passkey {
     }
   };
 
+  credentialRawIdAsBase64({ credential }: { credential: PublicKeyCredential}): PasskeyRawIdResponse {
+    logger.debug('Getting rawId as base64')
+    if (credential) {
+      return { data: null, error: PASSKEY_ERRORS.CREDENTIAL_NOT_CREATED };
+    }
+    try {
+      const rawIdStr = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+      return { data: rawIdStr, error: null };
+    } catch (e) {
+      logger.error(PASSKEY_ERRORS.ERROR_RETRIEVING_RAW_ID, e);
+      return { data: null, error: PASSKEY_ERRORS.ERROR_RETRIEVING_RAW_ID }
+    }
+  }
+
   static async create({ appName, username, email }: { appName: string, username: string, email?: string }): Promise<PasskeyCreationResponse> {
     logger.debug('Creating credential');
     try {
@@ -41,13 +60,13 @@ export class Passkey {
       const credential = (await navigator.credentials.create({
         publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username, email),
       })) as PublicKeyCredential;
-  
+
       this._createdCredential = credential;
       return { data: credential, error: null };
     } catch (e) {
-      console.error(PASSKEY_ERRORS.USER_REJECTED_CREDENTIAL, e);
+      logger.error(PASSKEY_ERRORS.USER_REJECTED_CREDENTIAL, e);
       return { data: null, error: PASSKEY_ERRORS.USER_REJECTED_CREDENTIAL };
     }
-    
+
   }
 }
