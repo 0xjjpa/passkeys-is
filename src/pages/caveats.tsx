@@ -17,10 +17,13 @@ import { PASSKEYS_CAVEATS } from '../constants/passkeysCaveats';
 const Caveats = () => {
   return (
     <Container height="100vh">
-      <Flex justifyContent="center" alignItems="center" height="100vh">
+      <Flex justifyContent="center" alignItems="center" height="100vh" direction="column">
         <Heading as="h2" size="lg" mb={6} textAlign="center">
           Passkeys' Caveats
         </Heading>
+        <Text fontFamily={'Merriweather'}>
+          <NextLink href='/'>Back Home_</NextLink>
+        </Text>
       </Flex>
       <Main>
         <Box
