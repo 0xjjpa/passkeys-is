@@ -10,8 +10,6 @@ import {
 import NextLink from 'next/link';
 import { Main } from '../components/Main';
 import { DarkModeSwitch } from '../components/DarkModeSwitch';
-import { PasskeyCode } from '../components/PasskeyCode';
-import { CiLock } from 'react-icons/ci';
 import { PasskeyManager } from '../components/PasskeyManager';
 import { PasskeyFooter } from '../components/PasskeyFooter';
 import { PASSKEYS_CAVEATS } from '../constants/passkeysCaveats';
@@ -31,16 +29,17 @@ const Caveats = () => {
         >
           {
             PASSKEYS_CAVEATS.map((caveat) => (
-              <React.Fragment key={caveat.heading}>
-                <Heading as="h3" size="sm" mb={6} textAlign="center">
-                  {caveat.heading}
-                </Heading>
+              <Box key={caveat.id} mb="12">
+                <Flex justifyContent="center" alignItems="center">
+                  <Heading as="h3" size="sm" mb={3} textAlign="center">
+                    {caveat.heading}
+                  </Heading>
+                </Flex>
                 <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
                   <Icon as={caveat.icon} mr="2" />
                   {caveat.content}
                 </Text>
-                <br />
-              </React.Fragment>
+              </Box>
             ))
           }
           <Text fontFamily={'Merriweather'}>

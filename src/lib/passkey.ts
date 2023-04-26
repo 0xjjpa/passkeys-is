@@ -37,7 +37,6 @@ export class Passkey {
   };
 
   credentialRawIdAsBase64({ credential }: { credential: PublicKeyCredential}): PasskeyRawIdResponse {
-    logger.debug('Getting rawId as base64')
     if (credential) {
       return { data: null, error: PASSKEY_ERRORS.CREDENTIAL_NOT_CREATED };
     }
@@ -51,7 +50,7 @@ export class Passkey {
   }
 
   static async create({ appName, username, email }: { appName: string, username: string, email?: string }): Promise<PasskeyCreationResponse> {
-    logger.debug('Creating credential');
+    logger.debug('(🪪,ℹ️) Creating credential');
     try {
       if (!navigator.credentials) {
         return { data: null, error: PASSKEY_ERRORS.BROWSER_DOES_NOT_SUPPORT_PASSKEY }
