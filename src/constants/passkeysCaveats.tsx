@@ -1,4 +1,4 @@
-import { CiAlignCenterV, CiBoxList, CiLock, CiNoWaitingSign, CiSquareQuestion } from 'react-icons/ci';
+import { CiAlignCenterV, CiBoxList, CiCircleRemove, CiLock, CiNoWaitingSign, CiSquareQuestion } from 'react-icons/ci';
 import { PasskeyCode } from "../components/PasskeyCode";
 import { Tag } from '@chakra-ui/react';
 
@@ -32,5 +32,17 @@ export const PASSKEYS_CAVEATS = [
     heading: <>Length of <PasskeyCode>rawId</PasskeyCode> and <PasskeyCode>id</PasskeyCode> <Tag size="sm" colorScheme='green'>New</Tag></>,
     icon: CiAlignCenterV,
     content: <>Passkeys have a <PasskeyCode>id</PasskeyCode> property equal to their <PasskeyCode>rawId</PasskeyCode> value (an <PasskeyCode>ArrayBuffer</PasskeyCode>) encoded in <PasskeyCode>base64</PasskeyCode>. However, the <PasskeyCode>id</PasskeyCode> property will remove the padding of the value (i.e. the <PasskeyCode>=</PasskeyCode> character), making it <i>sometimes</i> a different length than if you were to encode the <PasskeyCode>rawId</PasskeyCode> in <PasskeyCode>bas64</PasskeyCode> yourself. Both values are valid <PasskeyCode>base64</PasskeyCode> encoded strings (i.e., decoders will understand them) but ideally default to using <PasskeyCode>id</PasskeyCode> to avoid these length discrepancies.</>
+  },
+  {
+    id: 'random-errors',
+    heading: <>Creating credentials might throw an error <Tag size="sm" colorScheme='yellow'>Untested</Tag></>,
+    icon: CiCircleRemove,
+    content: <>Despite what would be correct code, the <PasskeyCode>navigator.credentials.create</PasskeyCode> code might throw an error with a <PasskeyCode>Request cancelled by user</PasskeyCode> independently on whether the user accepted or rejected the request.</>
+  },
+  {
+    id: 'client-code',
+    heading: <>Calling code from client side creates a key<Tag size="sm" colorScheme='yellow'>Untested</Tag></>,
+    icon: CiCircleRemove,
+    content: <>If you provide a correct <PasskeyCode>navigator.credentials.create</PasskeyCode> code via the Developers Toolbar, you can trigger the <PasskeyCode>webauthn</PasskeyCode> workflow. The key will be then created in the client's Passkey storage. If this action was executed in <PasskeyCode>localhost</PasskeyCode> and there was a key already in that domain, it will be replaced. However, in any other domain, even if the <PasskeyCode>rp</PasskeyCode> property matches, it will not overwrite the existing one but create a new one instead.</>
   }
 ]

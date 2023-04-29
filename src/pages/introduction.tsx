@@ -6,6 +6,8 @@ import {
   Flex,
   Icon,
   useColorMode,
+  Button,
+  useClipboard,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { CiLock } from 'react-icons/ci';
@@ -16,9 +18,39 @@ import { PasskeyCode } from '../components/PasskeyCode';
 import { PasskeyManager } from '../components/PasskeyManager';
 import { PasskeyFooter } from '../components/PasskeyFooter';
 import { PasskeySnippet } from '../components/atoms/PasskeySnippet';
+import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
 
 
 const About = () => {
+  const navigatorCredentialCode = `
+  navigator
+    .credentials.create({
+      publicKey: {
+        challenge: new Uint8Array(16),
+        rp: {
+          name: "Passkeys.is",
+        },
+        user: {
+          id: new Uint8Array(16),
+          name: "demo@localhost",
+          displayName: "Display Name",
+        },
+        pubKeyCredParams: [
+          {
+            type: "public-key",
+            alg: -7,
+          },
+        ],
+        timeout: 60000,
+        attestation: "direct",
+      },
+  })
+  `;
+  const developerToolsReady = `
+    console.log('🖱️ Click in any part of the website, or the code will throw an error.');
+    setTimeout(() => ${navigatorCredentialCode}, 5000);
+  `
+  const { onCopy, hasCopied } = useClipboard(developerToolsReady);
   const { colorMode } = useColorMode()
 
   return (
@@ -44,29 +76,12 @@ const About = () => {
           <PasskeySnippet
             isDark={colorMode === 'dark'}
             snippet={`
-  const credential = (await navigator
-    .credentials.create({
-      publicKey: {
-        challenge: new Uint8Array(16),
-        rp: {
-          name: "My App",
-        },
-        user: {
-          id: new Uint8Array(16),
-          name: "Email or Username",
-        },
-        pubKeyCredParams: [
-          {
-            type: "public-key",
-            alg: -7,
-          },
-        ],
-        timeout: 60000,
-        attestation: "direct",
-      },
-  })) as PublicKeyCredential;
+  const credential = (await ${navigatorCredentialCode}) as PublicKeyCredential;
             `}
           />
+          <Button onClick={onCopy} mt="2" size={"sm"} leftIcon={hasCopied ? <CheckIcon /> : <CopyIcon />} colorScheme='teal' variant='outline'>
+            {hasCopied ? "Test by pasting in Developer Toolbar" : <Text>Copy <PasskeyCode>navigator.credentials.create</PasskeyCode></Text>}
+          </Button>
           <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
             One of the key benefits of Passkeys is the elimination of the need for traditional passwords. This reduces the risks associated with password reuse, phishing, and brute-force attacks. With Passkeys, users can securely authenticate using <PasskeyCode>Face ID</PasskeyCode>, <PasskeyCode>Touch ID</PasskeyCode>, or a security key (like a <PasskeyCode>Yubikey</PasskeyCode>), which provides a more seamless and convenient experience. Within the Apple ecosystem, Passkeys are stored in <PasskeyCode>iCloud Keychain</PasskeyCode>, ensuring synchronization across devices and platforms, and offering users a consistent experience without the hassle of remembering multiple passwords.
           </Text>
