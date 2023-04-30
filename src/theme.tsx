@@ -15,6 +15,14 @@ const breakpoints = {
 
 const theme = extendTheme(
   {
+    components: {
+      Text: {
+        baseStyle: {
+          lineHeight: '1.6',
+          letterSpacing: '0.2px'
+        }
+      }
+    },
     semanticTokens: {
       colors: {
         text: {

@@ -8,16 +8,27 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
+import Image from "next/image";
+
 import { Main } from '../components/Main';
 import { DarkModeSwitch } from '../components/DarkModeSwitch';
 import { PasskeyManager } from '../components/PasskeyManager';
 import { PasskeyFooter } from '../components/PasskeyFooter';
 import { PASSKEYS_CAVEATS } from '../constants/passkeysCaveats';
 
+
 const Caveats = () => {
   return (
     <Container height="100vh">
       <Flex justifyContent="center" alignItems="center" height="100vh" direction="column">
+      <Box mb="5" mx="auto">
+          <Image
+            alt="Passkeys.is"
+            width={36}
+            height={18}
+            src="/passkeys.svg"
+          />
+        </Box>
         <Heading as="h2" size="lg" mb={6} textAlign="center">
           Passkeys' Caveats
         </Heading>
@@ -38,7 +49,7 @@ const Caveats = () => {
                     {caveat.heading}
                   </Heading>
                 </Flex>
-                <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
+                <Text mt={2}>
                   <Icon as={caveat.icon} mr="2" />
                   {caveat.content}
                 </Text>

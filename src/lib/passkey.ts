@@ -1,7 +1,7 @@
 import { PASSKEY_ERRORS } from "../constants/errors";
 import { logger } from "./logger";
 
-export type PasskeyCreationResponse = {
+export type PasskeyResponse = {
   data: PublicKeyCredential | null;
   error: string | null;
 }
@@ -49,7 +49,7 @@ export class Passkey {
     }
   }
 
-  static async create({ appName, username, email }: { appName: string, username: string, email?: string }): Promise<PasskeyCreationResponse> {
+  static async create({ appName, username, email }: { appName: string, username: string, email?: string }): Promise<PasskeyResponse> {
     logger.debug('(🪪,ℹ️) Creating credential');
     try {
       if (!navigator.credentials) {
@@ -66,6 +66,26 @@ export class Passkey {
       logger.error(PASSKEY_ERRORS.USER_REJECTED_CREDENTIAL, e);
       return { data: null, error: PASSKEY_ERRORS.USER_REJECTED_CREDENTIAL };
     }
+  }
 
+  static async get({ allowCredentials = [] }: { allowCredentials?: PublicKeyCredentialDescriptor[]}): Promise<PasskeyResponse> {
+    logger.debug('(🪪,ℹ️) Obtaining credentials');
+    try {
+      const publicKeyCredentialRequestOptions: PublicKeyCredentialRequestOptions = {
+        challenge: new Uint8Array(16),
+        timeout: 60000,
+        allowCredentials,
+      };
+
+      const assertion = (await navigator.credentials.get({
+        publicKey: publicKeyCredentialRequestOptions,
+      })) as PublicKeyCredential;
+
+      return { data: assertion, error: null }
+
+    } catch (e) {
+      logger.error(PASSKEY_ERRORS.UNABLE_TO_RETRIEVE_CREDENTIAL, e);
+      return { data: null, error: PASSKEY_ERRORS.UNABLE_TO_RETRIEVE_CREDENTIAL };
+    }
   }
 }

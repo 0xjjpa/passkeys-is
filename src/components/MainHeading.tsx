@@ -54,7 +54,7 @@ const MainHeading = () => {
 
   return (
     <Box textAlign="center" px="2">
-      <Heading as="h1" size="lg" mb={2} style={{ textShadow: "1px 1px 1px #aaa" }}>
+      <Heading as="h1" size="lg" mb={2}>
         Passkeys.is
       </Heading>
       <Flex>
