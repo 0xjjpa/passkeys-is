@@ -4,7 +4,6 @@ import {
   Flex,
   Link,
 } from "@chakra-ui/react";
-import Image from "next/image";
 
 import { Container } from "../components/Container";
 import { Main } from "../components/Main";
@@ -14,18 +13,14 @@ import MainHeading from "../components/MainHeading";
 import { PasskeyManager } from "../components/PasskeyManager";
 import { PasskeyFooter } from "../components/PasskeyFooter";
 import { PasskeyCode } from "../components/PasskeyCode";
+import { PasskeyImageMain } from "../components/images/PasskeyImageMain";
 
 
 const Index = () => (
   <Container height="100vh">
     <Flex justifyContent="center" alignItems="center" height="100vh" direction="column">
-      <Box mb="5" mx="auto">
-        <Image
-          alt="Passkeys.is"
-          width={36}
-          height={18}
-          src="/passkeys.svg"
-        />
+      <Box mb="5" mx="auto" width="48px">
+        <PasskeyImageMain />
       </Box>
       <MainHeading />
     </Flex>

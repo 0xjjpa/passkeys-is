@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { CiLock } from 'react-icons/ci';
-import Image from "next/image";
 
 import { Main } from '../components/Main';
 import { DarkModeSwitch } from '../components/DarkModeSwitch';
@@ -20,6 +19,7 @@ import { PasskeyManager } from '../components/PasskeyManager';
 import { PasskeyFooter } from '../components/PasskeyFooter';
 import { PasskeySnippet } from '../components/atoms/PasskeySnippet';
 import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
+import { PasskeyImageMain } from '../components/images/PasskeyImageMain';
 
 
 const About = () => {
@@ -57,13 +57,8 @@ const About = () => {
   return (
     <Container height="100vh">
       <Flex justifyContent="center" alignItems="center" height="100vh" direction="column">
-        <Box mb="5" mx="auto">
-          <Image
-            alt="Passkeys.is"
-            width={36}
-            height={18}
-            src="/passkeys.svg"
-          />
+        <Box mb="5" mx="auto" width="48px">
+          <PasskeyImageMain />
         </Box>
         <Heading as="h2" size="lg" mb={6} textAlign="center">
           Introduction to Passkeys_
@@ -88,8 +83,8 @@ const About = () => {
   const credential = (await ${navigatorCredentialCode}) as PublicKeyCredential;
             `}
           />
-          <Button onClick={onCopy} mt="2" size={"sm"} leftIcon={hasCopied ? <CheckIcon /> : <CopyIcon />} colorScheme='teal' variant='outline'>
-            {hasCopied ? "Test by pasting in Developer Toolbar" : <Text>Copy Passkey creation code</Text>}
+          <Button onClick={onCopy} mt="2" size={"xs"} py="4" leftIcon={hasCopied ? <CheckIcon /> : <CopyIcon />} colorScheme='teal' variant='outline'>
+            <Text fontWeight='100'>{hasCopied ? "Test by pasting in Developer Toolbar" : "Copy Passkey creation code"}</Text>
           </Button>
           <Text mt={2} style={{ lineHeight: '1.6', letterSpacing: '0.2' }}>
             One of the key benefits of Passkeys is the elimination of the need for traditional passwords. This reduces the risks associated with password reuse, phishing, and brute-force attacks. With Passkeys, users can securely authenticate using <PasskeyCode>Face ID</PasskeyCode>, <PasskeyCode>Touch ID</PasskeyCode>, or a security key (like a <PasskeyCode>Yubikey</PasskeyCode>), which provides a more seamless and convenient experience. Within the Apple ecosystem, Passkeys are stored in <PasskeyCode>iCloud Keychain</PasskeyCode>, ensuring synchronization across devices and platforms, and offering users a consistent experience without the hassle of remembering multiple passwords.
