@@ -44,5 +44,11 @@ export const PASSKEYS_CAVEATS = [
     heading: <>Calling code from client side creates a key<Tag size="sm" colorScheme='yellow'>Untested</Tag></>,
     icon: CiCircleRemove,
     content: <>If you provide a correct <PasskeyCode>navigator.credentials.create</PasskeyCode> code via the Developers Toolbar, you can trigger the <PasskeyCode>webauthn</PasskeyCode> workflow. The key will be then created in the client's Passkey storage. If this action was executed in <PasskeyCode>localhost</PasskeyCode> and there was a key already in that domain, it will be replaced. However, in any other domain, even if the <PasskeyCode>rp</PasskeyCode> property matches, it will not overwrite the existing one but create a new one instead.</>
+  },
+  {
+    id: 'p-384-support',
+    heading: <>Support for <PasskeyCode>p-384</PasskeyCode> keys is non-existent <Tag size="sm" colorScheme='green'>New</Tag></>,
+    icon: CiCircleRemove,
+    content: <>Despite documentation describing support for <PasskeyCode>p-384</PasskeyCode> curves by using <PasskeyCode>-35</PasskeyCode> as a <PasskeyCode>pubKeyCredParams</PasskeyCode> instead of the standard <PasskeyCode>-7</PasskeyCode> as part of the <PasskeyCode>PublicKeyCredentialCreationOptions</PasskeyCode> object, no platform ID seems to be fully supporting this curve.</>
   }
 ]
