@@ -1,4 +1,6 @@
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { StyleFunctionProps, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools'
+
 
 const fonts = {
   body: `'Open Sans', sans-serif`,
@@ -15,12 +17,35 @@ const breakpoints = {
 
 const theme = extendTheme(
   {
+    styles: {
+      global: (props: StyleFunctionProps) => ({
+        code: {
+          borderRadius: '5px',
+          px: 2,
+          py: 1,
+          border: '1px solid #aaa',
+          fontFamily: "mono",
+          fontSize: "sm",
+          bg: mode('rgb(237, 242, 247)', 'rgba(226, 232, 240, 0.16)')(props),
+          color: mode('gray.800', 'whiteAlpha.900')(props),
+        }
+      })
+    },
     components: {
       Text: {
         baseStyle: {
           lineHeight: '1.6',
           letterSpacing: '0.2px'
         }
+      },
+      Code: {
+        baseStyle: {
+          borderRadius: '5px',
+          paddingRight: 2,
+          paddingLeft: 2,
+          border: '1px solid #aaa'
+        }
+
       }
     },
     semanticTokens: {

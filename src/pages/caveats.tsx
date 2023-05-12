@@ -28,7 +28,7 @@ const Caveats = () => {
           Passkeys' Caveats
         </Heading>
         <Text fontFamily={'Merriweather'}>
-          <NextLink href='/'>Back Home_</NextLink>
+          <NextLink href='/'>Back to home_</NextLink>
         </Text>
       </Flex>
       <Main>
@@ -37,22 +37,19 @@ const Caveats = () => {
           textAlign="left"
         >
           {
-            PASSKEYS_CAVEATS.map((caveat) => (
-              <Box key={caveat.id} mb="12">
-                <Flex justifyContent="center" alignItems="center">
-                  <Heading as="h3" size="sm" mb={3} textAlign="center">
-                    {caveat.heading}
-                  </Heading>
+            PASSKEYS_CAVEATS.map((caveat, index) => (
+              <Box key={caveat.id} mb="4">
+                <Flex justifyContent="left" alignItems="left">
+                  <Text mr="4" fontFamily='mono'>0x{(index).toString(16).padStart(2, '0')}</Text>
+                  <NextLink href={`/not/${caveat.id}`} style={{ display: "flex" }}>
+                    <Text style={{ cursor: 'pointer' }} size="sm" textAlign="center" dangerouslySetInnerHTML={{ __html: caveat.heading }} />&nbsp;››
+                  </NextLink>
                 </Flex>
-                <Text mt={2}>
-                  <Icon as={caveat.icon} mr="2" />
-                  {caveat.content}
-                </Text>
               </Box>
             ))
           }
-          <Text fontFamily={'Merriweather'}>
-            <NextLink href='/'>Back Home_</NextLink>
+          <Text fontFamily={'Merriweather'} mt={20}>
+            <NextLink href='/'>Back to home_</NextLink>
           </Text>
         </Box>
       </Main>
@@ -61,7 +58,7 @@ const Caveats = () => {
       <DarkModeSwitch />
       <PasskeyManager />
       <PasskeyFooter />
-    </Container>
+    </Container >
   );
 };
 
