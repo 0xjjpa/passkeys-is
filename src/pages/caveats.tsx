@@ -44,7 +44,7 @@ const Caveats = () => {
                   <Flex justifyContent="left" alignItems="left">
                     <Text mr="4" fontFamily='mono'>0x{(index).toString(16).padStart(2, '0')}</Text>
                     <NextLink href={`/not/${caveat.id}`} style={{ display: "flex" }}>
-                      <Text style={{ cursor: 'pointer' }} size="sm" textAlign="center" dangerouslySetInnerHTML={{ __html: caveat.heading }} />&nbsp;››
+                      <Text style={{ cursor: 'pointer' }} size="sm" textAlign="left" dangerouslySetInnerHTML={{ __html: caveat.heading }} />&nbsp;››
                     </NextLink>
                   </Flex>
                   <Text fontSize='xs'>{caveat.description}</Text>
