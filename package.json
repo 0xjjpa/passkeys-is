@@ -4,6 +4,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "dev:time": "node -e 'console.log(`${new Date().getTime()}`)'",
     "dev:lastUpdated": "node -e 'console.log(`export const LAST_UPDATED = ${new Date().getTime()}`)' > src/constants/lastUpdated.ts"
   },
   "dependencies": {

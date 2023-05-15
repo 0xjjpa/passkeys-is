@@ -52,7 +52,7 @@ const Caveats = ({ caveat }: { caveat: typeof PASSKEYS_CAVEATS[0] }) => {
           </Box>
           <SimpleGrid mb={6} textAlign='center'>
             <Heading as="h2" size="lg" textAlign="center">
-              {caveat.heading}
+              {title}
             </Heading>
             <Text>{caveat.description}</Text>
           </SimpleGrid>
