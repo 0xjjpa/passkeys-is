@@ -17,20 +17,34 @@ import { PasskeyManager } from '../../components/PasskeyManager';
 import { PasskeyFooter } from '../../components/PasskeyFooter';
 import { PASSKEYS_CAVEATS } from '../../constants/passkeysCaveats';
 import { PasskeyImageMain } from '../../components/images/PasskeyImageMain';
+import { NextSeo } from 'next-seo';
 
 
 const Caveats = ({ caveat }: { caveat: typeof PASSKEYS_CAVEATS[0] }) => {
   const title = caveat?.title || caveat.heading
   return (
     <>
-      <Head>
-        <title>{`Passkeys.is - ${title}`}</title>
-        <meta name="description" content={caveat.description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={caveat.description} />
-        <meta property="og:url" content={`https://passkeys.is/not/${caveat.id}`} />
-        <meta property="og:image" content={`https://passkeys.is/images/passkeys.jpg`} />
-      </Head>
+      <NextSeo
+        title={`Passkeys.is - ${title}`}
+        description={caveat.description}
+        openGraph={{
+          type: 'website',
+          locale: 'en_IE',
+          url: `https://passkeys.is/not/${caveat.id}`,
+          siteName: 'Passkeys.is',
+          images: [{
+            url: 'https://passkeys.is/images/passkeys.jpg',
+            width: 1200,
+            height: 630,
+            alt: 'Passkeys',
+          }],
+        }}
+        twitter={{
+          handle: '@0xjjpa',
+          site: '@0xjjpa',
+          cardType: 'summary_large_image',
+        }}
+      />
       <Container height="100vh">
         <Flex justifyContent="center" alignItems="center" height="100vh" direction="column">
           <Box mb="5" mx="auto" width="48px">
