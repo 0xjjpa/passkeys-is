@@ -6,6 +6,7 @@ import {
   Text,
   Flex,
   Icon,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
@@ -39,12 +40,15 @@ const Caveats = () => {
           {
             PASSKEYS_CAVEATS.map((caveat, index) => (
               <Box key={caveat.id} mb="4">
-                <Flex justifyContent="left" alignItems="left">
-                  <Text mr="4" fontFamily='mono'>0x{(index).toString(16).padStart(2, '0')}</Text>
-                  <NextLink href={`/not/${caveat.id}`} style={{ display: "flex" }}>
-                    <Text style={{ cursor: 'pointer' }} size="sm" textAlign="center" dangerouslySetInnerHTML={{ __html: caveat.heading }} />&nbsp;››
-                  </NextLink>
-                </Flex>
+                <SimpleGrid columns={1}>
+                  <Flex justifyContent="left" alignItems="left">
+                    <Text mr="4" fontFamily='mono'>0x{(index).toString(16).padStart(2, '0')}</Text>
+                    <NextLink href={`/not/${caveat.id}`} style={{ display: "flex" }}>
+                      <Text style={{ cursor: 'pointer' }} size="sm" textAlign="center" dangerouslySetInnerHTML={{ __html: caveat.heading }} />&nbsp;››
+                    </NextLink>
+                  </Flex>
+                  <Text fontSize='xs'>{caveat.description}</Text>
+                </SimpleGrid>
               </Box>
             ))
           }
