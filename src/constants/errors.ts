@@ -4,5 +4,7 @@ export enum PASSKEY_ERRORS {
     BROWSER_DOES_NOT_SUPPORT_PASSKEY = 'The browser does not support Passkey, or the context does not expose it (e.g. a non-HTTPS page).',
     CREDENTIAL_NOT_CREATED = 'The credential has not been created yet.',
     ERROR_RETRIEVING_RAW_ID = 'There was an error retrieving the rawId from the credential.',
+    INVALID_CREDENTIAL_RESPONSE = 'The provided response is not a valid response object from a get or create call',
+    CREDENTIAL_RESPONSE_HAS_NO_PUBLIC_KEY = 'The provided response is not an attestation response and has no public key'
 }
 
