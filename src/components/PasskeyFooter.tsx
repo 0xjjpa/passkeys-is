@@ -21,7 +21,7 @@ export const PasskeyFooter = () => {
       <Text mb="4" fontFamily="mono" fontSize="xs">MIT License code available in <Link isExternal href='https://github.com/0xjjpa/passkeys-is'>
         <Icon as={DiGithub} pt="1" />GitHub
       </Link>.</Text>
-      <Text w="80%" textAlign={'center'} fontFamily="mono" fontSize="xs">{`Last updated - ${new Date(LAST_UPDATED)}`}</Text>
+      <Text w="80%" textAlign={'center'} fontFamily="mono" fontSize="xs">{`Last updated - ${new Date(LAST_UPDATED).toISOString()}`}</Text>
     </Flex>
   </Footer>);
 }

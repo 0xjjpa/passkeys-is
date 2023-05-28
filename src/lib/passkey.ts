@@ -21,7 +21,7 @@ export class Passkey {
   // @TODO: Decide whether we want runtime public key credential management or keep static in all methods
   static _createdCredential: PublicKeyCredential;
 
-  static getPublicKeyAsHexStringFromAttestationResponse({ response }: { response: AuthenticatorAttestationResponse}) {
+  static getPublicKeyFromAttestationResponse({ response }: { response: AuthenticatorAttestationResponse }) {
     if (!response) {
       return { data: null, error: PASSKEY_ERRORS.INVALID_CREDENTIAL_RESPONSE };
     }
@@ -29,7 +29,7 @@ export class Passkey {
       const publicKey = response.getPublicKey();
       const publicKeyAsHex = Passkey.buf2hex(publicKey);
       logger.debug('(🪪,ℹ️) Public Key as Hex', publicKeyAsHex);
-      return { data: publicKeyAsHex, error: null };
+      return { data: publicKey, error: null };
     } catch (e) {
       logger.error(PASSKEY_ERRORS.CREDENTIAL_RESPONSE_HAS_NO_PUBLIC_KEY, e);
       return { data: null, error: PASSKEY_ERRORS.CREDENTIAL_RESPONSE_HAS_NO_PUBLIC_KEY }
@@ -87,6 +87,40 @@ export class Passkey {
     } catch (e) {
       logger.error(PASSKEY_ERRORS.ERROR_RETRIEVING_RAW_ID, e);
       return { data: null, error: PASSKEY_ERRORS.ERROR_RETRIEVING_RAW_ID }
+    }
+  }
+
+  // NB: This is the easiest way to parse the DER format from the getPublicKey method given the webauthn
+  // navigator.credentials.create({ ... }).response object. Do not try to mess with CBOR against this
+  // ArrayBuffer directly, as it does not have enough data to be parsed properly via CBOR.
+  static importPublicKeyAsCryptoKey = async (publicKey: ArrayBuffer): Promise<CryptoKey | null> => {
+    logger.debug('(🔑,ℹ️) Parsing webauthn response public key as CryptoKey via Web Crypto API');
+    try {
+      const key = await crypto.subtle.importKey(
+        // The getPublicKey() operation thus returns the credential public key as a SubjectPublicKeyInfo. See:
+        // https://w3c.github.io/webauthn/#sctn-public-key-easy
+        // crypto.subtle can import the spki format:
+        // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey
+        "spki", // "spki" Simple Public Key Infrastructure rfc2692
+        publicKey,
+        {
+          // these are the algorithm options
+          // await cred.response.getPublicKeyAlgorithm() // returns -7
+          // -7 is ES256 with P-256 // search -7 in https://w3c.github.io/webauthn
+          // the W3C webcrypto docs:
+          // https://www.w3.org/TR/WebCryptoAPI/#informative-references (scroll down a bit)
+          // ES256 corrisponds with the following AlgorithmIdentifier:
+          name: "ECDSA",
+          namedCurve: "P-256",
+          hash: { name: "SHA-256" }
+        },
+        true, //whether the key is extractable (i.e. can be used in exportKey)
+        ["verify"] //"verify" for public key import, "sign" for private key imports
+      );
+      return key;
+    } catch (e) {
+      logger.error(PASSKEY_ERRORS.PUBLIC_KEY_CANT_BE_PARSED_AS_CRYPTO_KEY, e);
+      return null;
     }
   }
 

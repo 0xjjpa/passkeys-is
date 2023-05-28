@@ -15,6 +15,8 @@
     "@emotion/styled": "^11.9.0",
     "@fontsource/merriweather": "^4.5.14",
     "@fontsource/open-sans": "^4.5.14",
+    "@types/elliptic": "^6.4.14",
+    "elliptic": "^6.5.4",
     "framer-motion": "^6.3.0",
     "next": "latest",
     "next-seo": "^6.0.0",

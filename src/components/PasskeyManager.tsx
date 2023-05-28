@@ -1,16 +1,18 @@
-import { AddIcon, ExternalLinkIcon, HamburgerIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, HamburgerIcon, ViewIcon } from "@chakra-ui/icons";
 import { Text, Box, IconButton, Menu, MenuButton, MenuItem, MenuList, useToast, MenuGroup, Tag, Icon, Flex, SimpleGrid } from "@chakra-ui/react";
 import { useLocalStorage } from 'usehooks-ts'
 
 import { Passkey, truncate } from "../lib/passkey";
 import { logger } from "../lib/logger";
 import { CircleIcon } from "./atoms/CircleIcon";
+import { Wallet } from "../lib/wallet";
 
 export const PasskeyManager = () => {
   const toast = useToast()
   const [credentialRawIdAsBase64, setCredentialRawIdAsBase64] = useLocalStorage('credentialRawIdAsBase64', null)
   const [publicKeyAsHexString, setPublicKeyAsHexstring] = useLocalStorage('publicKeyAsHexString', null)
   const [credentialId, setCredentialId] = useLocalStorage('credentialId', null)
+  const [walletAddress, setWalletAddress] = useLocalStorage('walletAddress', null)
 
   const createCredentialHandler = async () => {
     const { data: credential, response, error } = await Passkey.create({
@@ -42,8 +44,10 @@ export const PasskeyManager = () => {
       setCredentialRawIdAsBase64(rawIdAsBase64)
     }
     if (response) {
-      // @TODO: Ensure type casting is not needed.
-      const { data: publicKeyAsHexString } = Passkey.getPublicKeyAsHexStringFromAttestationResponse({ response } as { response: AuthenticatorAttestationResponse });
+      const { data: publicKey } = Passkey.getPublicKeyFromAttestationResponse({ response } as { response: AuthenticatorAttestationResponse });
+      const publicKeyAsCryptoKey = await Passkey.importPublicKeyAsCryptoKey(publicKey);
+      const wallet = new Wallet(publicKeyAsCryptoKey)
+      setWalletAddress(await wallet.getAddress());
       setPublicKeyAsHexstring(publicKeyAsHexString)
     }
   }
@@ -101,11 +105,11 @@ export const PasskeyManager = () => {
           </MenuItem>
           <MenuGroup title='Current key'>
             {
-              (credentialId && publicKeyAsHexString) ?
+              (credentialId && walletAddress) ?
                 <MenuItem icon={<CircleIcon color='green.500' />}>
                   <SimpleGrid columns={1}>
                     <Text fontFamily='mono' fontSize='xs'>Credential Id: {credentialId}</Text>
-                    <Text fontFamily='mono' fontSize='xs'>Public Key: {truncate(publicKeyAsHexString)}</Text>
+                    <Text fontFamily='mono' fontSize='xs'>Public Key Account: {`0x${walletAddress}`}</Text>
                   </SimpleGrid>
                 </MenuItem>
                 :
