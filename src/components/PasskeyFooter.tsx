@@ -18,10 +18,10 @@ export const PasskeyFooter = () => {
   return (<Footer>
     <Flex flexDir={'column'} alignItems={'center'}>
       <Text mb="4" fontFamily="mono">By <Link isExternal href='https://twitter.com/0xjjpa'>0xjjpa</Link>.{isOffline && '- Offline'}</Text>
-      <Text mb="4" fontFamily="mono" fontSize="xs">MIT License code available in <Link isExternal href='https://github.com/0xjjpa/passkeys-is'>
+      <Text mb="4" fontFamily="mono" fontSize="xs">MIT License'd code available in <Link isExternal href='https://github.com/0xjjpa/passkeys-is'>
         <Icon as={DiGithub} pt="1" />GitHub
       </Link>.</Text>
-      <Text w="80%" textAlign={'center'} fontFamily="mono" fontSize="xs">{`Last updated - ${new Date(LAST_UPDATED).toISOString()}`}</Text>
+      <Text w="80%" textAlign={'center'} fontFamily="mono" fontSize="xs">{`Last updated - ${new Date(LAST_UPDATED).toDateString()}`}</Text>
     </Flex>
   </Footer>);
 }

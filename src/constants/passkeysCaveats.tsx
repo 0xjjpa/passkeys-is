@@ -48,5 +48,12 @@ export const PASSKEYS_CAVEATS = [
     heading: 'Support for <code>p-384</code> keys is non-existent',
     description: 'Passkeys don’t really support other keys other than p-256',
     content: `Despite documentation describing support for <code>p-384</code> curves by using <code>-35</code> as a <code>pubKeyCredParams</code> instead of the standard <code>-7</code> as part of the <code>PublicKeyCredentialCreationOptions</code> object, no platform ID seems to be fully supporting this curve.`
+  },
+  {
+    id: 'exposing-passkeys-public-keys-in-CBOR-format',
+    heading: 'Public key parsed in DER format',
+    time: 1685365541536,
+    description: 'Webauthn exports the public key in DER format',
+    content: `The easiest way to retrieve the public key of a user during the webauthn workflow is by calling <code>getPublicKey()</code> of the <code>response</code> object returned during the credential creation process. To ensure you have access to this object, cast the response with the type <code>AuthenticatorAttestationResponse</code>, otherwise the method won’t be available. Bear in mind this interface is only available during creation of the Passkey and not during retrieval (e.g. <code>get</code> call) of the credential, where an assertation against the server data is being created.<br/><br/>Finally, bear in mind that when using this method, the public key is returned in <b>DER</b> format, and not in <b>CBOR</b> format as it’s being retrieved from the <code>authenticatorData</code> payload. You can import and manipulate this key (originally an <code>ArrayBuffer</code>) as a <code>CryptoKey</code> using the Web Cryptographi API <code>crypto.subtle.importKey</code> method passing the <code>spki</code> format as parameter.`
   }
 ]

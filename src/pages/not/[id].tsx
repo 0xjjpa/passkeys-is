@@ -8,7 +8,6 @@ import {
   Icon,
   SimpleGrid,
 } from '@chakra-ui/react';
-import Head from 'next/head'
 import NextLink from 'next/link';
 
 import { Main } from '../../components/Main';
@@ -55,6 +54,7 @@ const Caveats = ({ caveat }: { caveat: typeof PASSKEYS_CAVEATS[0] }) => {
               {title}
             </Heading>
             <Text>{caveat.description}</Text>
+            {caveat.time && <Text mt='2' fontSize='xs' fontFamily='mono'>Last updated - {new Date(caveat.time).toDateString()}</Text>}
           </SimpleGrid>
           <Text fontFamily={'Merriweather'}>
             <NextLink href='/caveats'>Back to caveats_</NextLink>
