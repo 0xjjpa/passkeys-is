@@ -1,4 +1,4 @@
-import { AddIcon, HamburgerIcon, ViewIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, SmallAddIcon, ViewIcon } from "@chakra-ui/icons";
 import { Text, Box, IconButton, Menu, MenuButton, MenuItem, MenuList, useToast, MenuGroup, Tag, Icon, Flex, SimpleGrid } from "@chakra-ui/react";
 import { useLocalStorage } from 'usehooks-ts'
 
@@ -14,11 +14,12 @@ export const PasskeyManager = () => {
   const [credentialId, setCredentialId] = useLocalStorage('credentialId', null)
   const [walletAddress, setWalletAddress] = useLocalStorage('walletAddress', null)
 
-  const createCredentialHandler = async () => {
+  const createCredentialHandler = async ({ yubikeyOnly }: { yubikeyOnly?: boolean }) => {
     const { data: credential, response, error } = await Passkey.create({
       appName: 'Passkey',
       username: 'Demo Username',
-      email: 'test@demo.com'
+      email: 'test@demo.com',
+      yubikeyOnly
     });
     if (error) {
       logger.error('(🪪,❌) Error', error)
@@ -46,6 +47,8 @@ export const PasskeyManager = () => {
     if (response) {
       const { data: publicKey } = Passkey.getPublicKeyFromAttestationResponse({ response } as { response: AuthenticatorAttestationResponse });
       const publicKeyAsCryptoKey = await Passkey.importPublicKeyAsCryptoKey(publicKey);
+      const exported = await window.crypto.subtle.exportKey("jwk", publicKeyAsCryptoKey);
+      logger.info('Public Key as Crypto Key and JWT', publicKeyAsCryptoKey, exported)
       const wallet = new Wallet(publicKeyAsCryptoKey)
       setWalletAddress(await wallet.getAddress());
       setPublicKeyAsHexstring(publicKeyAsHexString)
@@ -53,7 +56,7 @@ export const PasskeyManager = () => {
   }
 
   const getAssertionHandler = async () => {
-    const { data: assertion, error } = await Passkey.get({});
+    const { data: assertion, response, error } = await Passkey.get({});
     if (error) {
       logger.error('(🪪,❌) Error', error)
       toast({
@@ -73,6 +76,7 @@ export const PasskeyManager = () => {
         duration: 9000,
         isClosable: true,
       })
+      const signature = (response as AuthenticatorAssertionResponse).signature;
     }
   }
 
@@ -92,9 +96,15 @@ export const PasskeyManager = () => {
           <MenuGroup title='Operations'>
             <MenuItem
               aria-label="Create Passkey"
-              onClick={createCredentialHandler}
-              icon={<AddIcon />} command="test@demo.com">
-              <Text>Create Passkey</Text>
+              onClick={() => createCredentialHandler({})}
+              icon={<SmallAddIcon />} command="test@demo.com">
+              <Text>New Passkey</Text>
+            </MenuItem>
+            <MenuItem
+              aria-label="Create Passkey"
+              onClick={() => createCredentialHandler({ yubikeyOnly: true })}
+              icon={<SmallAddIcon />} command="roaming@demo.com">
+              <Text>New (Roaming) Passkey</Text>
             </MenuItem>
           </MenuGroup>
           <MenuItem

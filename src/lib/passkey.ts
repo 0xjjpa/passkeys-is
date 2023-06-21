@@ -3,7 +3,7 @@ import { logger } from "./logger";
 
 export type PasskeyCredentialResponse = {
   data: PublicKeyCredential | null;
-  response: AuthenticatorAttestationResponse | AuthenticatorAssertionResponse | null; 
+  response: AuthenticatorAttestationResponse | AuthenticatorAssertionResponse | null;
   error: string | null;
 }
 
@@ -36,7 +36,7 @@ export class Passkey {
     }
   }
 
-  static async create({ appName, username, email }: { appName: string, username: string, email?: string }): Promise<PasskeyCredentialResponse> {
+  static async create({ appName, username, email, yubikeyOnly }: { appName: string, username: string, email?: string, yubikeyOnly?: boolean }): Promise<PasskeyCredentialResponse> {
     logger.debug('(🪪,ℹ️) Creating credential');
     try {
       if (!navigator.credentials) {
@@ -44,7 +44,7 @@ export class Passkey {
       }
 
       const credential = (await navigator.credentials.create({
-        publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username, email),
+        publicKey: Passkey.publicKeyCredentialCreationOptions(appName, username, email, yubikeyOnly),
       })) as PublicKeyCredential;
 
       this._createdCredential = credential;
@@ -55,7 +55,7 @@ export class Passkey {
     }
   }
 
-  static async get({ allowCredentials = [] }: { allowCredentials?: PublicKeyCredentialDescriptor[]}): Promise<PasskeyCredentialResponse> {
+  static async get({ allowCredentials = [] }: { allowCredentials?: PublicKeyCredentialDescriptor[] }): Promise<PasskeyCredentialResponse> {
     logger.debug('(🪪,ℹ️) Obtaining credentials');
     try {
       const publicKeyCredentialRequestOptions: PublicKeyCredentialRequestOptions = {
@@ -77,7 +77,7 @@ export class Passkey {
   }
 
   // @TODO: Replace static calls for outside of class utilities
-  static credentialRawIdAsBase64({ credential }: { credential: PublicKeyCredential}): PasskeyRawIdResponse {
+  static credentialRawIdAsBase64({ credential }: { credential: PublicKeyCredential }): PasskeyRawIdResponse {
     if (!credential) {
       return { data: null, error: PASSKEY_ERRORS.CREDENTIAL_NOT_CREATED };
     }
@@ -124,7 +124,7 @@ export class Passkey {
     }
   }
 
-  static publicKeyCredentialCreationOptions(appName: string, username: string, email?: string): PublicKeyCredentialCreationOptions {
+  static publicKeyCredentialCreationOptions(appName: string, username: string, email?: string, yubikeyOnly?: boolean): PublicKeyCredentialCreationOptions {
     return {
       challenge: new Uint8Array(16),
       rp: {
@@ -143,9 +143,14 @@ export class Passkey {
       ],
       timeout: 60000,
       attestation: "direct",
+      ...(yubikeyOnly && {
+        authenticatorSelection: {
+          authenticatorAttachment: 'cross-platform',
+        }
+      })
     }
   };
-  
+
   static buf2hex(buffer: ArrayBuffer) {
     return [...new Uint8Array(buffer)]
       .map(x => x.toString(16).padStart(2, '0'))
