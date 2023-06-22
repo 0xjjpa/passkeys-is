@@ -15,6 +15,12 @@ interface PasskeyStringResponse {
 export type PasskeyRawIdResponse = PasskeyStringResponse;
 export type PasskeyPublicKeyAsHexResponse = PasskeyStringResponse;
 
+export type Verification = {
+  isValid: boolean,
+  signature: Uint8Array,
+  data: Uint8Array
+}
+
 export const truncate = (word: string) => word && `...${word.substr(word.length - 10, word.length)}`
 
 export class Passkey {
@@ -124,6 +130,39 @@ export class Passkey {
     }
   }
 
+  static verifySignature = async ({ publicKey, assertation}: { publicKey: ArrayBuffer, assertation: AuthenticatorAssertionResponse}): Promise<Verification> => {
+    const { signature, clientDataJSON, authenticatorData } = assertation;
+  
+    const authenticatorDataAsUint8Array = new Uint8Array(authenticatorData);  
+    const clientDataHash = new Uint8Array(await crypto.subtle.digest("SHA-256", clientDataJSON));
+    
+    // concat authenticatorData and clientDataHash
+    const signedData = new Uint8Array(authenticatorDataAsUint8Array.length + clientDataHash.length);
+    signedData.set(authenticatorDataAsUint8Array);
+    signedData.set(clientDataHash, authenticatorDataAsUint8Array.length);
+  
+    // import key
+    var key = await Passkey.importPublicKeyAsCryptoKey(publicKey);
+  
+    // Convert signature from ASN.1 sequence to "raw" format
+    var usignature = new Uint8Array(signature);
+    var rStart = usignature[4] === 0 ? 5 : 4;
+    var rEnd = rStart + 32;
+    var sStart = usignature[rEnd + 2] === 0 ? rEnd + 3 : rEnd + 2;
+    var r = usignature.slice(rStart, rEnd);
+    var s = usignature.slice(sStart);
+    var rawSignature = new Uint8Array([...r, ...s]);
+  
+    // check signature with public key and signed data 
+    var verified = await crypto.subtle.verify(
+      <EcdsaParams>{ name: "ECDSA", namedCurve: "P-256", hash: { name: "SHA-256" } },
+      key,
+      rawSignature,
+      signedData.buffer
+    );  
+    return { isValid: verified, signature: rawSignature, data: signedData };
+  }
+
   static publicKeyCredentialCreationOptions(appName: string, username: string, email?: string, yubikeyOnly?: boolean): PublicKeyCredentialCreationOptions {
     return {
       challenge: new Uint8Array(16),
@@ -155,5 +194,11 @@ export class Passkey {
     return [...new Uint8Array(buffer)]
       .map(x => x.toString(16).padStart(2, '0'))
       .join('');
+  }
+
+  static hex2buf(hex: string) {
+    return new Uint8Array(hex.match(/[\da-f]{2}/gi).map(function (h) {
+      return parseInt(h, 16)
+    }))
   }
 }
