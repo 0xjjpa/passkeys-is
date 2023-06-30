@@ -21,6 +21,13 @@ export type Verification = {
   data: Uint8Array
 }
 
+export type WebauthnChallenge = {
+  type: string, //usually 'webauthn.get'
+  challenge: string
+  origin: string //usually the origin of the webauthn request
+}
+
+
 export const truncate = (word: string) => word && `...${word.substr(word.length - 10, word.length)}`
 
 export class Passkey {
@@ -63,9 +70,14 @@ export class Passkey {
 
   static async get({ allowCredentials = [] }: { allowCredentials?: PublicKeyCredentialDescriptor[] }): Promise<PasskeyCredentialResponse> {
     logger.debug('(🪪,ℹ️) Obtaining credentials');
+    const randomUUID = crypto.randomUUID()
+    const challenge = this.hex2buf("353a3ed5a0441919f1c639a46931de872ac3357de2ce5aa2d68c2639df54189d")
+    logger.debug('(🪄,ℹ️) Challenge', challenge);
+    logger.debug('(🪄,ℹ️) Challenge (base64)', this.toBase64url(challenge));
+    logger.debug('(🪄,ℹ️) Challenge (hex)', this.buf2hex(challenge));
     try {
       const publicKeyCredentialRequestOptions: PublicKeyCredentialRequestOptions = {
-        challenge: new Uint8Array(16),
+        challenge,
         timeout: 60000,
         allowCredentials,
       };
@@ -130,20 +142,31 @@ export class Passkey {
     }
   }
 
-  static verifySignature = async ({ publicKey, assertation}: { publicKey: ArrayBuffer, assertation: AuthenticatorAssertionResponse}): Promise<Verification> => {
+  static verifySignature = async ({ publicKey, assertation }: { publicKey: ArrayBuffer, assertation: AuthenticatorAssertionResponse }): Promise<Verification> => {
+    // rough lengths per attr: signature = 140+/-5, authenticatorData = 74, clientData = 200+
+    logger.debug('(📥,ℹ️), assertation', assertation);
     const { signature, clientDataJSON, authenticatorData } = assertation;
-  
-    const authenticatorDataAsUint8Array = new Uint8Array(authenticatorData);  
+    logger.debug('(🖊️,ℹ️), signature', this.buf2hex(signature), this.buf2hex(signature).length);
+    logger.debug('(👤,ℹ️), clientDataJSON', this.buf2hex(clientDataJSON), this.buf2hex(clientDataJSON).length);
+    logger.debug('(🔑,ℹ️), authenticatorData', this.buf2hex(authenticatorData), this.buf2hex(authenticatorData).length);
+
+    const obtainedClientDataJSON: WebauthnChallenge = JSON.parse(new TextDecoder().decode(clientDataJSON));
+    logger.debug('(👤,ℹ️), clientDataJSON (parsed)', obtainedClientDataJSON);
+    logger.debug('(👤,ℹ️), challenge (from clientDataJSON)', this.buf2hex(this.parseBase64url(obtainedClientDataJSON.challenge)));
+    // logger.debug('(👀,ℹ️), challenge', this.buf2hex(new TextEncoder().encode(obtainedClientDataJSON.challenge)));
+
+
+    const authenticatorDataAsUint8Array = new Uint8Array(authenticatorData);
     const clientDataHash = new Uint8Array(await crypto.subtle.digest("SHA-256", clientDataJSON));
-    
+
     // concat authenticatorData and clientDataHash
     const signedData = new Uint8Array(authenticatorDataAsUint8Array.length + clientDataHash.length);
     signedData.set(authenticatorDataAsUint8Array);
     signedData.set(clientDataHash, authenticatorDataAsUint8Array.length);
-  
+
     // import key
     var key = await Passkey.importPublicKeyAsCryptoKey(publicKey);
-  
+
     // Convert signature from ASN.1 sequence to "raw" format
     var usignature = new Uint8Array(signature);
     var rStart = usignature[4] === 0 ? 5 : 4;
@@ -152,14 +175,15 @@ export class Passkey {
     var r = usignature.slice(rStart, rEnd);
     var s = usignature.slice(sStart);
     var rawSignature = new Uint8Array([...r, ...s]);
-  
+
     // check signature with public key and signed data 
     var verified = await crypto.subtle.verify(
       <EcdsaParams>{ name: "ECDSA", namedCurve: "P-256", hash: { name: "SHA-256" } },
       key,
       rawSignature,
       signedData.buffer
-    );  
+    );
+
     return { isValid: verified, signature: rawSignature, data: signedData };
   }
 
@@ -200,5 +224,23 @@ export class Passkey {
     return new Uint8Array(hex.match(/[\da-f]{2}/gi).map(function (h) {
       return parseInt(h, 16)
     }))
+  }
+
+  static parseBase64url(txt: string): ArrayBuffer {
+    txt = txt.replaceAll('-', '+').replaceAll('_', '/') // base64url -> base64
+    return this.toBuffer(atob(txt))
+  }
+
+  static toBuffer(txt: string): ArrayBuffer {
+    return Uint8Array.from(txt, c => c.charCodeAt(0)).buffer
+  }
+
+  static toBase64url(buffer: ArrayBuffer): string {
+    const txt = btoa(this.parseBuffer(buffer)) // base64
+    return txt.replaceAll('+', '-').replaceAll('/', '_')
+  }
+
+  static parseBuffer(buffer: ArrayBuffer): string {
+    return String.fromCharCode(...new Uint8Array(buffer))
   }
 }

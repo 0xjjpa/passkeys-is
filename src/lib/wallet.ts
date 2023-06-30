@@ -18,11 +18,14 @@ class Wallet {
       return;
     }
     if (jwkKey) {
-      let ec = new EC('p256');
-      let key = ec.keyFromPublic({
+      let curve = new EC('p256');
+      let key = curve.keyFromPublic({
         x: jwkKey.x,
         y: jwkKey.y,
       }, 'hex');
+
+      console.log("(🔑,ℹ️) X Point Public Key", jwkKey.x);
+      console.log("(🔑,ℹ️) Y Point Public Key", jwkKey.y);
 
       const x = key.getPublic().getX();
       const y = key.getPublic().getY();
