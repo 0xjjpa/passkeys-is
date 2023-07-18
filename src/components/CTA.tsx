@@ -1,4 +1,4 @@
-import { SimpleGrid, Icon, Text } from '@chakra-ui/react'
+import { SimpleGrid, Icon, Text, Tag } from '@chakra-ui/react'
 import { NavButton } from './NavButton'
 import { CiCircleInfo, CiMoneyBill, CiBoxList, CiFlag1 } from 'react-icons/ci'
 
@@ -26,7 +26,7 @@ export const CTA = () => (
       mx={2}
       width="full"
     >
-      <Icon as={CiMoneyBill} mr="2" /><Text>Passkeys & Crypto (WIP)</Text>
+      <Icon as={CiMoneyBill} mr="2" /><Text>Passkeys & Crypto</Text><Tag ml='2' colorScheme='yellow' variant='outline' size='sm'>Soon</Tag>
     </NavButton>
     <NavButton
       disabled

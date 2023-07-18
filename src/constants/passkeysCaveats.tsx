@@ -69,6 +69,12 @@ export const PASSKEYS_CAVEATS = [
     time: 1689678796798,
     description: 'Passkeys in iCloud are by default backed up.',
     content: 'As a requirement to work with Passkeys in the Apple ecosystem, iCloud for Keychain needs to be enabled. As a result, Passkeys generated in an iOS device will be synced using Apple’s encrypted <code>HSM</code> setup that protects all user’s iCloud accounts. This means that other iOS devices sharing the same Apple ID will automatically sync this Passkey. In case of <code>10</code> failed Apple ID attempts to recover an iCloud account, as detailed by Apple’s Terms of Service, the account will be locked, and no further information, included Passkeys connected to this account, can be recovered.<br/></br>Passkeys can be backed up to a different Apple ID account using iOS’s Airdrop feature. Both users (sender and recipient) need to be in each other contacts’s list. After sending the Passkey, it will be available on the recipient’s phone via its traditional biometrics workflow. Although an iOS device can send a Passkey to a macOS device (e.g., macbook Air, macbook Pro), the latter can not make use of the Passkey, nor it is available via Keychain or Safari to log in to the website the Passkey was created in.'
-
+  },
+  {
+    id: 'exposing-the-public-key-other-than-during-generation',
+    heading: 'Passkeys’ Public Keys',
+    time: 1689678796799,
+    description: 'Public key is only available during generation',
+    content: 'Although part of the Passkey information is provided as part of the "signing" or "attestation" process of the <code>Webauthn</code> workflow, the actual public key is <b>NOT</b> included in the response. The attestation includes a signature over the <code>clientDataJSON</code> and the <code>authenticatorData</code>, the latter including some information about the actual device used during the verification process. However, the public key data is only available during the registration part of the Webauthn workflow (i.e., the <code>navigator.credentials.create</code> call) and is not available to that particular Passkey anymore, not even during the <code>navigator.credentials.get</code> call.<br/></br/>To access a Passkey public key, you need to <code>await</code> for the response payload, and call the method <code>response.getPublicKey()</code>. Within TypeScript, you can cast the <code>response</code> of the <code>credential</code> as <code>AuthenticatorAttestationResponse</code> to have visibility of the <code>getPublicKey</code> method.'
   }
 ]
