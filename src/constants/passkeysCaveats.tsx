@@ -62,5 +62,13 @@ export const PASSKEYS_CAVEATS = [
     time: 1687331025809,
     description: 'Requests can force specific authenticators.',
     content: 'The property <code>authenticatorSelection</code> and its children <code>authenticatorAttachment</code> can determine a preference for a particular authenticator. If selected <code>cross-platform</code>, then the webauthn authentication catalog will only show support for roaming authenticators (e.g., <code>Yubikey</code>). At the same time, if selected <code>platform</code>, it will request only biometrics-supported authentication. By default (i.e., if the property is missing), no preference is given and thus, both options can be selected.<br/><br/>There are a couple of edge-cases where a platform authenticator can be toggled on and off (e.g., a keyboard with a fingerprint reader with FIDO2 support) and <code>platform</code> is preferred. If the only authenticator is this device, then the workflow will continue w/o even prompting signature using the previously loaded key before the authenticator was disconnected.'
+  },
+  {
+    id: 'stored-only-locally-in-ios',
+    heading: 'iCloud backups',
+    time: 1689678796798,
+    description: 'Passkeys in iCloud are by default backed up.',
+    content: 'As a requirement to work with Passkeys in the Apple ecosystem, iCloud for Keychain needs to be enabled. As a result, Passkeys generated in an iOS device will be synced using Apple’s encrypted <code>HSM</code> setup that protects all user’s iCloud accounts. This means that other iOS devices sharing the same Apple ID will automatically sync this Passkey. In case of <code>10</code> failed Apple ID attempts to recover an iCloud account, as detailed by Apple’s Terms of Service, the account will be locked, and no further information, included Passkeys connected to this account, can be recovered.<br/></br>Passkeys can be backed up to a different Apple ID account using iOS’s Airdrop feature. Both users (sender and recipient) need to be in each other contacts’s list. After sending the Passkey, it will be available on the recipient’s phone via its traditional biometrics workflow. Although an iOS device can send a Passkey to a macOS device (e.g., macbook Air, macbook Pro), the latter can not make use of the Passkey, nor it is available via Keychain or Safari to log in to the website the Passkey was created in.'
+
   }
 ]
